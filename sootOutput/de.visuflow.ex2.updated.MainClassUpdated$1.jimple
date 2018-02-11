@@ -1,0 +1,63 @@
+class de.visuflow.ex2.updated.MainClassUpdated$1 extends soot.BodyTransformer
+{
+    private final de.visuflow.reporting.IReporter val$reporter;
+    private final java.util.Map val$cache;
+    private final java.util.Map val$changeSet;
+
+    void <init>(de.visuflow.reporting.IReporter, java.util.Map, java.util.Map)
+    {
+        de.visuflow.ex2.updated.MainClassUpdated$1 this;
+        de.visuflow.reporting.IReporter l1;
+        java.util.Map l2, l3;
+
+        this := @this: de.visuflow.ex2.updated.MainClassUpdated$1;
+
+        l1 := @parameter0: de.visuflow.reporting.IReporter;
+
+        l2 := @parameter1: java.util.Map;
+
+        l3 := @parameter2: java.util.Map;
+
+        this.<de.visuflow.ex2.updated.MainClassUpdated$1: de.visuflow.reporting.IReporter val$reporter> = l1;
+
+        this.<de.visuflow.ex2.updated.MainClassUpdated$1: java.util.Map val$cache> = l2;
+
+        this.<de.visuflow.ex2.updated.MainClassUpdated$1: java.util.Map val$changeSet> = l3;
+
+        specialinvoke this.<soot.BodyTransformer: void <init>()>();
+
+        return;
+    }
+
+    protected void internalTransform(soot.Body, java.lang.String, java.util.Map)
+    {
+        de.visuflow.ex2.updated.MainClassUpdated$1 this;
+        soot.Body b;
+        java.lang.String phaseName;
+        java.util.Map options, $r2, $r3;
+        de.visuflow.ex2.updated.IntraproceduralAnalysisUpdated $r0;
+        de.visuflow.reporting.IReporter $r1;
+
+        this := @this: de.visuflow.ex2.updated.MainClassUpdated$1;
+
+        b := @parameter0: soot.Body;
+
+        phaseName := @parameter1: java.lang.String;
+
+        options := @parameter2: java.util.Map;
+
+        $r0 = new de.visuflow.ex2.updated.IntraproceduralAnalysisUpdated;
+
+        $r1 = this.<de.visuflow.ex2.updated.MainClassUpdated$1: de.visuflow.reporting.IReporter val$reporter>;
+
+        specialinvoke $r0.<de.visuflow.ex2.updated.IntraproceduralAnalysisUpdated: void <init>(soot.Body,de.visuflow.reporting.IReporter)>(b, $r1);
+
+        $r3 = this.<de.visuflow.ex2.updated.MainClassUpdated$1: java.util.Map val$cache>;
+
+        $r2 = this.<de.visuflow.ex2.updated.MainClassUpdated$1: java.util.Map val$changeSet>;
+
+        virtualinvoke $r0.<de.visuflow.ex2.updated.IntraproceduralAnalysisUpdated: void doAnalyis(java.util.Map,java.util.Map)>($r3, $r2);
+
+        return;
+    }
+}

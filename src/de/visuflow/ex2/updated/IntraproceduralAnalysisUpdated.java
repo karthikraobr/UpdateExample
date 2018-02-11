@@ -1,7 +1,8 @@
-package de.visuflow.ex2;
+package de.visuflow.ex2.updated;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import soot.jimple.FieldRef;
 import soot.jimple.InvokeExpr;
 import soot.jimple.ReturnStmt;
 import soot.jimple.Stmt;
+import soot.jimple.changeset.FlowAbstraction;
 import soot.jimple.internal.AbstractBinopExpr;
 import soot.jimple.internal.AbstractDefinitionStmt;
 import soot.jimple.internal.AbstractInstanceOfExpr;
@@ -26,12 +28,12 @@ import soot.tagkit.Tag;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.scalar.ForwardFlowAnalysis;
 
-public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowAbstraction>> {
+public class IntraproceduralAnalysisUpdated extends ForwardFlowAnalysis<Unit, Set<FlowAbstractionUpdated>> {
     public int flowThroughCount = 0;
     private final SootMethod method;
     private final IReporter reporter;
 
-    public IntraproceduralAnalysis(Body b, IReporter reporter, Map<String, Object> cache2) {
+    public IntraproceduralAnalysisUpdated(Body b, IReporter reporter) {
         super(new ExceptionalUnitGraph(b));
         this.method = b.getMethod();
         this.reporter = reporter;
@@ -40,11 +42,11 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
     }
 
     @Override
-    protected void flowThrough(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    protected void flowThrough(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         // this set collect all taints of the current iteration
         // at the end this will be merged with the taints from in set
         // and "returned" as the out set
-        Set<FlowAbstraction> taintsOfThisIteration = new HashSet<FlowAbstraction>();
+        Set<FlowAbstractionUpdated> taintsOfThisIteration = new HashSet<FlowAbstractionUpdated>();
         // several different checks for taints
         checkGetSecret(in, d, taintsOfThisIteration);
         checkTaintOverwrite(in, d, taintsOfThisIteration);
@@ -64,7 +66,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkAssignmentOfTaintedClassField(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkAssignmentOfTaintedClassField(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if (d instanceof AbstractDefinitionStmt) {
             AbstractDefinitionStmt def = (AbstractDefinitionStmt) d;
             Value leftSide = def.getLeftOp();
@@ -103,7 +105,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkTaintedOperand(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkTaintedOperand(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         checkInstanceOf(in, d, out);
         checkLogicOperands(in, d, out);
         checkArithmeticOperands(in, d, out);
@@ -115,7 +117,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkArithmeticOperands(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkArithmeticOperands(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         checkBinaryOperation(in, d, out);
     }
 
@@ -125,7 +127,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkLogicOperands(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkLogicOperands(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         checkBinaryOperation(in, d, out);
     }
 
@@ -136,15 +138,15 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkBinaryOperation(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkBinaryOperation(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if (d instanceof AbstractDefinitionStmt) {
             AbstractDefinitionStmt def = (AbstractDefinitionStmt) d;
             Value leftSide = def.getLeftOp();
             Value rightSide = def.getRightOp();
             if(leftSide instanceof Local && rightSide instanceof AbstractBinopExpr) {
                 AbstractBinopExpr expr = (AbstractBinopExpr) rightSide;
-                FlowAbstraction taint1 = isInTaintedSet(expr.getOp1(), in);
-                FlowAbstraction taint2 = isInTaintedSet(expr.getOp2(), in);
+                FlowAbstractionUpdated taint1 = isInTaintedSet(expr.getOp1(), in);
+                FlowAbstractionUpdated taint2 = isInTaintedSet(expr.getOp2(), in);
                 if(taint1 != null || taint2 != null) {
                     taint(leftSide, d, out);
                 }
@@ -158,14 +160,14 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkInstanceOf(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkInstanceOf(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if (d instanceof AbstractDefinitionStmt) {
             AbstractDefinitionStmt def = (AbstractDefinitionStmt) d;
             Value leftSide = def.getLeftOp();
             Value rightSide = def.getRightOp();
             if(leftSide instanceof Local && rightSide instanceof AbstractInstanceOfExpr) {
                 AbstractInstanceOfExpr expr = (AbstractInstanceOfExpr) rightSide;
-                FlowAbstraction taint = isInTaintedSet(expr.getOp(), in);
+                FlowAbstractionUpdated taint = isInTaintedSet(expr.getOp(), in);
                 if(taint != null) {
                     taint(leftSide, d, out);
                 }
@@ -179,7 +181,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkLeak(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkLeak(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         checkParameterLeak(in,d,out);
         checkReturnLeak(in,d,out);
     }
@@ -191,10 +193,10 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkReturnLeak(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkReturnLeak(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if(d instanceof ReturnStmt) {
             ReturnStmt ret = (ReturnStmt) d;
-            FlowAbstraction taint = isInTaintedSet(ret.getOp(), in);
+            FlowAbstractionUpdated taint = isInTaintedSet(ret.getOp(), in);
             if(taint != null) {
                 Unit source = taint.getSource();
                 reporter.report(method, source, d);
@@ -209,13 +211,13 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkParameterLeak(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkParameterLeak(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if (d instanceof Stmt) {
             Stmt stmt = (Stmt) d;
             if (stmt.containsInvokeExpr() && stmt.getInvokeExpr().getArgCount() > 0) {
                 InvokeExpr invokeExpr = stmt.getInvokeExpr();
                 for (Value arg : invokeExpr.getArgs()) {
-                    FlowAbstraction taint = isInTaintedSet(arg, in);
+                    FlowAbstractionUpdated taint = isInTaintedSet(arg, in);
                     if (taint != null) {
                         Unit source = taint.getSource();
                         reporter.report(method, source, d);
@@ -235,14 +237,14 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkAssignmentOfTaintedLocal(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkAssignmentOfTaintedLocal(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if (d instanceof AbstractDefinitionStmt) {
             AbstractDefinitionStmt def = (AbstractDefinitionStmt) d;
             Value leftSide = def.getLeftOp();
             Value rightSide = def.getRightOp();
             if ((leftSide instanceof Local || leftSide instanceof FieldRef) && rightSide instanceof Local) {
-                for (Iterator<FlowAbstraction> iterator = in.iterator(); iterator.hasNext();) {
-                    FlowAbstraction taint  = iterator.next();
+                for (Iterator<FlowAbstractionUpdated> iterator = in.iterator(); iterator.hasNext();) {
+                    FlowAbstractionUpdated taint  = iterator.next();
                     if(taint.getLocal().equals(rightSide)) {
                         d.addTag(new Tainted("assignment of tainted local"));
                         taint(leftSide, d, out);
@@ -259,7 +261,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkTaintOverwrite(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkTaintOverwrite(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         // we are interested in assignments only 
         if (d instanceof AbstractDefinitionStmt) {
             AbstractDefinitionStmt def = (AbstractDefinitionStmt) d;
@@ -270,7 +272,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
                 d.removeTag(Tainted.NAME);
                 Local untainted = (Local) leftSide;
                 // now check, if the Local was tainted previously and remove it from the out set
-                FlowAbstraction taint = isInTaintedSet(untainted, in);
+                FlowAbstractionUpdated taint = isInTaintedSet(untainted, in);
                 if(taint != null) {
                     in.remove(taint);
                 }
@@ -285,7 +287,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void checkGetSecret(Set<FlowAbstraction> in, Unit d, Set<FlowAbstraction> out) {
+    private void checkGetSecret(Set<FlowAbstractionUpdated> in, Unit d, Set<FlowAbstractionUpdated> out) {
         if (d instanceof AbstractDefinitionStmt) {
             AbstractDefinitionStmt def = (AbstractDefinitionStmt) d;
             Value rightSide = def.getRightOp();
@@ -297,7 +299,7 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
                     // left side is tainted
                     // add tag with cause for the taint
                     //d.addTag(new Tainted("call to getSecret()"));
-                    out.add(new FlowAbstraction(d, (Local)leftSide));
+                    out.add(new FlowAbstractionUpdated(d, (Local)leftSide));
                 }
             }
         }
@@ -310,15 +312,15 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param d
      * @param out
      */
-    private void taint(Value v, Unit d, Set<FlowAbstraction> out) {
+    private void taint(Value v, Unit d, Set<FlowAbstractionUpdated> out) {
         if(v instanceof Local) {
-            out.add(new FlowAbstraction(d, (Local)v));
+            out.add(new FlowAbstractionUpdated(d, (Local)v));
         } else {
             FieldRef ref = (FieldRef) v;
             // add a tag to the declaring class, which marks it tainted
             ref.getField().getDeclaringClass().addTag(new Tainted("class contains tainted field [" + ref.getField().getName()+"]"));
             // add the field to the set of taints
-            out.add(new FlowAbstraction(d, ref.getField()));
+            out.add(new FlowAbstractionUpdated(d, ref.getField()));
         }
     }
     
@@ -330,9 +332,9 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
      * @param taintedSet
      * @return
      */
-    private FlowAbstraction isInTaintedSet(Object o, Set<FlowAbstraction> taintedSet) {
-        for (Iterator<FlowAbstraction> iterator = taintedSet.iterator(); iterator.hasNext();) {
-            FlowAbstraction taint  = iterator.next();
+    private FlowAbstractionUpdated isInTaintedSet(Object o, Set<FlowAbstractionUpdated> taintedSet) {
+        for (Iterator<FlowAbstractionUpdated> iterator = taintedSet.iterator(); iterator.hasNext();) {
+            FlowAbstractionUpdated taint  = iterator.next();
             
             if(o instanceof Local) {
                 if(taint.getLocal() != null && taint.getLocal().equals(o)) {
@@ -349,30 +351,29 @@ public class IntraproceduralAnalysis extends ForwardFlowAnalysis<Unit, Set<FlowA
     }
 
     @Override
-    protected Set<FlowAbstraction> newInitialFlow() {
-        return new HashSet<FlowAbstraction>();
+    protected Set<FlowAbstractionUpdated> newInitialFlow() {
+        return new HashSet<FlowAbstractionUpdated>();
     }
 
     @Override
-    protected Set<FlowAbstraction> entryInitialFlow() {
-        return new HashSet<FlowAbstraction>();
+    protected Set<FlowAbstractionUpdated> entryInitialFlow() {
+        return new HashSet<FlowAbstractionUpdated>();
     }
 
     @Override
-    protected void merge(Set<FlowAbstraction> in1, Set<FlowAbstraction> in2, Set<FlowAbstraction> out) {
+    protected void merge(Set<FlowAbstractionUpdated> in1, Set<FlowAbstractionUpdated> in2, Set<FlowAbstractionUpdated> out) {
         out.addAll(in1);
         out.addAll(in2);
     }
 
     @Override
-    protected void copy(Set<FlowAbstraction> source, Set<FlowAbstraction> dest) {
+    protected void copy(Set<FlowAbstractionUpdated> source, Set<FlowAbstractionUpdated> dest) {
         dest.clear();
         dest.addAll(source);
     }
     
-    public void doAnalyis(Map<String,Object> cache) {
-      Object result =  super.doCachedAnalysis();
-      cache.put(method.getSignature(), result);
+    public void doAnalyis(Map<String, Object> cache, Map<String, List<FlowAbstraction>> changeSet) {
+        super.doUpdate(cache.get(method.getSignature()),changeSet);
     }
     
     /**

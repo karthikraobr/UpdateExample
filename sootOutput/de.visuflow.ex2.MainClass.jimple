@@ -1,0 +1,112 @@
+public class de.visuflow.ex2.MainClass extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        de.visuflow.ex2.MainClass this;
+
+        this := @this: de.visuflow.ex2.MainClass;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[])
+    {
+        java.lang.String[] args;
+        java.util.Map changeSet;
+        java.util.HashMap $r0;
+        de.visuflow.reporting.EmptyReporter $r1;
+        soot.jimple.changeset.AnalysisChangeSetFinder $r2;
+
+        args := @parameter0: java.lang.String[];
+
+        $r0 = new java.util.HashMap;
+
+        specialinvoke $r0.<java.util.HashMap: void <init>()>();
+
+        $r1 = new de.visuflow.reporting.EmptyReporter;
+
+        specialinvoke $r1.<de.visuflow.reporting.EmptyReporter: void <init>()>();
+
+        staticinvoke <de.visuflow.ex2.MainClass: void runAnalysis(de.visuflow.reporting.IReporter,int,java.util.Map)>($r1, 3, $r0);
+
+        $r2 = new soot.jimple.changeset.AnalysisChangeSetFinder;
+
+        specialinvoke $r2.<soot.jimple.changeset.AnalysisChangeSetFinder: void <init>(java.lang.String,java.lang.String,java.lang.String)>("C:\\Users\\karth\\git\\visuflow-uitests-analysis-intial\\bin", "C:\\Users\\karth\\git\\visuflow-uitests-analysis-updated\\bin", "de.visuflow.ex2.MainClass");
+
+        changeSet = virtualinvoke $r2.<soot.jimple.changeset.AnalysisChangeSetFinder: java.util.Map computeChangeSet()>();
+
+        staticinvoke <de.visuflow.ex2.updated.MainClassUpdated: void main(java.util.Map,java.util.Map)>($r0, changeSet);
+
+        return;
+    }
+
+    public static void runAnalysis(de.visuflow.reporting.IReporter, int, java.util.Map)
+    {
+        de.visuflow.reporting.IReporter reporter;
+        int exercisenumber;
+        java.util.Map cache;
+        soot.PackManager $r2;
+        soot.Pack $r3;
+        java.lang.String[] $r4;
+        de.visuflow.ex2.MainClass$1 tmp$791563230;
+        soot.Transform tmp$1351275110;
+        soot.Transformer tmp$347354124;
+
+        reporter := @parameter0: de.visuflow.reporting.IReporter;
+
+        exercisenumber := @parameter1: int;
+
+        cache := @parameter2: java.util.Map;
+
+        staticinvoke <soot.G: void reset()>();
+
+        tmp$1351275110 = new soot.Transform;
+
+        tmp$791563230 = new de.visuflow.ex2.MainClass$1;
+
+        specialinvoke tmp$791563230.<de.visuflow.ex2.MainClass$1: void <init>(de.visuflow.reporting.IReporter,java.util.Map)>(reporter, cache);
+
+        tmp$347354124 = (soot.Transformer) tmp$791563230;
+
+        specialinvoke tmp$1351275110.<soot.Transform: void <init>(java.lang.String,soot.Transformer)>("jtp.analysis", tmp$347354124);
+
+        $r2 = staticinvoke <soot.PackManager: soot.PackManager v()>();
+
+        $r3 = virtualinvoke $r2.<soot.PackManager: soot.Pack getPack(java.lang.String)>("jtp");
+
+        virtualinvoke $r3.<soot.Pack: void add(soot.Transform)>(tmp$1351275110);
+
+        $r4 = newarray (java.lang.String)[12];
+
+        $r4[0] = "-pp";
+
+        $r4[1] = "-process-dir";
+
+        $r4[2] = "C:\\Users\\karth\\git\\visuflow-uitests-target\\bin";
+
+        $r4[3] = "-w";
+
+        $r4[4] = "-exclude";
+
+        $r4[5] = "javax";
+
+        $r4[6] = "-allow-phantom-refs";
+
+        $r4[7] = "-no-bodies-for-excluded";
+
+        $r4[8] = "-src-prec";
+
+        $r4[9] = "class";
+
+        $r4[10] = "-output-format";
+
+        $r4[11] = "none";
+
+        staticinvoke <soot.Main: void main(java.lang.String[])>($r4);
+
+        return;
+    }
+}

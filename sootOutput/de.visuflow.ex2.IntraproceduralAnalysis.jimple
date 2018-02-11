@@ -1,0 +1,2008 @@
+public class de.visuflow.ex2.IntraproceduralAnalysis extends soot.toolkits.scalar.ForwardFlowAnalysis
+{
+    public int flowThroughCount;
+    private final soot.SootMethod method;
+    private final de.visuflow.reporting.IReporter reporter;
+
+    public void <init>(soot.Body, de.visuflow.reporting.IReporter, java.util.Map)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        soot.Body b;
+        de.visuflow.reporting.IReporter reporter;
+        java.util.Map cache2;
+        soot.toolkits.graph.ExceptionalUnitGraph $r0;
+        soot.SootMethod $r1;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        b := @parameter0: soot.Body;
+
+        reporter := @parameter1: de.visuflow.reporting.IReporter;
+
+        cache2 := @parameter2: java.util.Map;
+
+        $r0 = new soot.toolkits.graph.ExceptionalUnitGraph;
+
+        specialinvoke $r0.<soot.toolkits.graph.ExceptionalUnitGraph: void <init>(soot.Body)>(b);
+
+        specialinvoke this.<soot.toolkits.scalar.ForwardFlowAnalysis: void <init>(soot.toolkits.graph.DirectedGraph)>($r0);
+
+        this.<de.visuflow.ex2.IntraproceduralAnalysis: int flowThroughCount> = 0;
+
+        $r1 = virtualinvoke b.<soot.Body: soot.SootMethod getMethod()>();
+
+        this.<de.visuflow.ex2.IntraproceduralAnalysis: soot.SootMethod method> = $r1;
+
+        this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.reporting.IReporter reporter> = reporter;
+
+        return;
+    }
+
+    protected void flowThrough(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        java.util.HashSet $r0;
+        int $i0, $i1;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        $r0 = new java.util.HashSet;
+
+        specialinvoke $r0.<java.util.HashSet: void <init>()>();
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkGetSecret(java.util.Set,soot.Unit,java.util.Set)>(in, d, $r0);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkTaintOverwrite(java.util.Set,soot.Unit,java.util.Set)>(in, d, $r0);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkAssignmentOfTaintedLocal(java.util.Set,soot.Unit,java.util.Set)>(in, d, $r0);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkAssignmentOfTaintedClassField(java.util.Set,soot.Unit,java.util.Set)>(in, d, $r0);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkLeak(java.util.Set,soot.Unit,java.util.Set)>(in, d, $r0);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkTaintedOperand(java.util.Set,soot.Unit,java.util.Set)>(in, d, $r0);
+
+        virtualinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void merge(java.util.Set,java.util.Set,java.util.Set)>(in, $r0, out);
+
+        $i0 = this.<de.visuflow.ex2.IntraproceduralAnalysis: int flowThroughCount>;
+
+        $i1 = $i0 + 1;
+
+        this.<de.visuflow.ex2.IntraproceduralAnalysis: int flowThroughCount> = $i1;
+
+        return;
+    }
+
+    private void checkAssignmentOfTaintedClassField(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        soot.jimple.internal.AbstractDefinitionStmt def;
+        soot.Value leftSide, rightSide;
+        soot.jimple.FieldRef ref;
+        soot.SootClass declaringClass;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        soot.SootField $r0;
+        soot.tagkit.Tag $r1;
+        de.visuflow.ex2.IntraproceduralAnalysis$1 $r2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkAssignmentOfTaintedClassField(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.internal.AbstractDefinitionStmt;
+
+        if $z0 == 0 goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        def = (soot.jimple.internal.AbstractDefinitionStmt) d;
+
+        leftSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getLeftOp()>();
+
+        rightSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getRightOp()>();
+
+        $z1 = leftSide instanceof soot.Local;
+
+        if $z1 != 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $z4 = leftSide instanceof soot.jimple.FieldRef;
+
+        if $z4 == 0 goto label2;
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $z2 = rightSide instanceof soot.jimple.FieldRef;
+
+        if $z2 == 0 goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        ref = (soot.jimple.FieldRef) rightSide;
+
+        $r0 = interfaceinvoke ref.<soot.jimple.FieldRef: soot.SootField getField()>();
+
+        declaringClass = virtualinvoke $r0.<soot.SootField: soot.SootClass getDeclaringClass()>();
+
+        $z3 = virtualinvoke declaringClass.<soot.SootClass: boolean hasTag(java.lang.String)>("Tainted");
+
+        if $z3 == 0 goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void taint(soot.Value,soot.Unit,java.util.Set)>(leftSide, d, out);
+
+        $r1 = virtualinvoke declaringClass.<soot.SootClass: soot.tagkit.Tag getTag(java.lang.String)>("Tainted");
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>($r1);
+
+        $r2 = new de.visuflow.ex2.IntraproceduralAnalysis$1;
+
+        specialinvoke $r2.<de.visuflow.ex2.IntraproceduralAnalysis$1: void <init>(de.visuflow.ex2.IntraproceduralAnalysis)>(this);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>($r2);
+
+     label2:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        return;
+    }
+
+    private void checkTaintedOperand(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkInstanceOf(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkLogicOperands(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkArithmeticOperands(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        return;
+    }
+
+    private void checkArithmeticOperands(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkBinaryOperation(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        return;
+    }
+
+    private void checkLogicOperands(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkBinaryOperation(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        return;
+    }
+
+    private void checkBinaryOperation(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        soot.jimple.internal.AbstractDefinitionStmt def;
+        soot.Value leftSide, rightSide, $r0, $r1;
+        soot.jimple.internal.AbstractBinopExpr expr;
+        de.visuflow.ex2.FlowAbstraction taint1, taint2;
+        boolean $z0, $z1, $z2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkBinaryOperation(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.internal.AbstractDefinitionStmt;
+
+        if $z0 == 0 goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        def = (soot.jimple.internal.AbstractDefinitionStmt) d;
+
+        leftSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getLeftOp()>();
+
+        rightSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getRightOp()>();
+
+        $z1 = leftSide instanceof soot.Local;
+
+        if $z1 == 0 goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        $z2 = rightSide instanceof soot.jimple.internal.AbstractBinopExpr;
+
+        if $z2 == 0 goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        expr = (soot.jimple.internal.AbstractBinopExpr) rightSide;
+
+        $r0 = virtualinvoke expr.<soot.jimple.internal.AbstractBinopExpr: soot.Value getOp1()>();
+
+        taint1 = specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object,java.util.Set)>($r0, in);
+
+        $r1 = virtualinvoke expr.<soot.jimple.internal.AbstractBinopExpr: soot.Value getOp2()>();
+
+        taint2 = specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object,java.util.Set)>($r1, in);
+
+        if taint1 != null goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint1 != null", boolRef);
+
+        if taint2 == null goto label2;
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint2 == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint1 != null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint1 != null", boolRef);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void taint(soot.Value,soot.Unit,java.util.Set)>(leftSide, d, out);
+
+     label2:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint2 == null", boolRef);
+
+        return;
+    }
+
+    private void checkInstanceOf(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        soot.jimple.internal.AbstractDefinitionStmt def;
+        soot.Value leftSide, rightSide, $r0;
+        soot.jimple.internal.AbstractInstanceOfExpr expr;
+        de.visuflow.ex2.FlowAbstraction taint;
+        boolean $z0, $z1, $z2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkInstanceOf(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.internal.AbstractDefinitionStmt;
+
+        if $z0 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        def = (soot.jimple.internal.AbstractDefinitionStmt) d;
+
+        leftSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getLeftOp()>();
+
+        rightSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getRightOp()>();
+
+        $z1 = leftSide instanceof soot.Local;
+
+        if $z1 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $z2 = rightSide instanceof soot.jimple.internal.AbstractInstanceOfExpr;
+
+        if $z2 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        expr = (soot.jimple.internal.AbstractInstanceOfExpr) rightSide;
+
+        $r0 = virtualinvoke expr.<soot.jimple.internal.AbstractInstanceOfExpr: soot.Value getOp()>();
+
+        taint = specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object,java.util.Set)>($r0, in);
+
+        if taint == null goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void taint(soot.Value,soot.Unit,java.util.Set)>(leftSide, d, out);
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        return;
+    }
+
+    private void checkLeak(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkParameterLeak(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void checkReturnLeak(java.util.Set,soot.Unit,java.util.Set)>(in, d, out);
+
+        return;
+    }
+
+    private void checkReturnLeak(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d, source;
+        soot.jimple.ReturnStmt 'ret';
+        de.visuflow.ex2.FlowAbstraction taint;
+        boolean $z0;
+        soot.Value $r0;
+        soot.SootMethod $r1;
+        de.visuflow.reporting.IReporter $r2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkReturnLeak(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.ReturnStmt;
+
+        if $z0 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        'ret' = (soot.jimple.ReturnStmt) d;
+
+        $r0 = interfaceinvoke 'ret'.<soot.jimple.ReturnStmt: soot.Value getOp()>();
+
+        taint = specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object,java.util.Set)>($r0, in);
+
+        if taint == null goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        source = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.Unit getSource()>();
+
+        $r2 = this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.reporting.IReporter reporter>;
+
+        $r1 = this.<de.visuflow.ex2.IntraproceduralAnalysis: soot.SootMethod method>;
+
+        interfaceinvoke $r2.<de.visuflow.reporting.IReporter: void report(soot.SootMethod,soot.Unit,soot.Unit)>($r1, source, d);
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        return;
+    }
+
+    private void checkParameterLeak(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d, source;
+        soot.jimple.Stmt stmt;
+        soot.jimple.InvokeExpr invokeExpr, $r0;
+        soot.Value arg;
+        java.util.Iterator l7;
+        de.visuflow.ex2.FlowAbstraction taint;
+        boolean $z0, $z1, $z2;
+        int $i0;
+        java.util.List $r1;
+        java.lang.Object $r2;
+        soot.SootMethod $r3;
+        de.visuflow.reporting.IReporter $r4;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkParameterLeak(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.Stmt;
+
+        if $z0 == 0 goto label3;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        stmt = (soot.jimple.Stmt) d;
+
+        $z1 = interfaceinvoke stmt.<soot.jimple.Stmt: boolean containsInvokeExpr()>();
+
+        if $z1 == 0 goto label3;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $r0 = interfaceinvoke stmt.<soot.jimple.Stmt: soot.jimple.InvokeExpr getInvokeExpr()>();
+
+        $i0 = interfaceinvoke $r0.<soot.jimple.InvokeExpr: int getArgCount()>();
+
+        if $i0 <= 0 goto label3;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        invokeExpr = interfaceinvoke stmt.<soot.jimple.Stmt: soot.jimple.InvokeExpr getInvokeExpr()>();
+
+        $r1 = interfaceinvoke invokeExpr.<soot.jimple.InvokeExpr: java.util.List getArgs()>();
+
+        l7 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+        goto label2;
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $r2 = interfaceinvoke l7.<java.util.Iterator: java.lang.Object next()>();
+
+        arg = (soot.Value) $r2;
+
+        taint = specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object,java.util.Set)>(arg, in);
+
+        if taint == null goto label2;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        source = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.Unit getSource()>();
+
+        $r4 = this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.reporting.IReporter reporter>;
+
+        $r3 = this.<de.visuflow.ex2.IntraproceduralAnalysis: soot.SootMethod method>;
+
+        interfaceinvoke $r4.<de.visuflow.reporting.IReporter: void report(soot.SootMethod,soot.Unit,soot.Unit)>($r3, source, d);
+
+     label2:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $z2 = interfaceinvoke l7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 != 0 goto label1;
+
+     label3:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$i0 <= 0", boolRef);
+
+        return;
+    }
+
+    private void checkAssignmentOfTaintedLocal(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        soot.jimple.internal.AbstractDefinitionStmt def;
+        soot.Value leftSide, rightSide;
+        java.util.Iterator iterator;
+        de.visuflow.ex2.FlowAbstraction taint;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        java.lang.Object $r0;
+        soot.Local $r1;
+        de.visuflow.ex2.IntraproceduralAnalysis$Tainted $r2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkAssignmentOfTaintedLocal(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.internal.AbstractDefinitionStmt;
+
+        if $z0 == 0 goto label4;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        def = (soot.jimple.internal.AbstractDefinitionStmt) d;
+
+        leftSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getLeftOp()>();
+
+        rightSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getRightOp()>();
+
+        $z1 = leftSide instanceof soot.Local;
+
+        if $z1 != 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        $z4 = leftSide instanceof soot.jimple.FieldRef;
+
+        if $z4 == 0 goto label4;
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        $z2 = rightSide instanceof soot.Local;
+
+        if $z2 == 0 goto label4;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        iterator = interfaceinvoke in.<java.util.Set: java.util.Iterator iterator()>();
+
+        goto label3;
+
+     label2:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        $r0 = interfaceinvoke iterator.<java.util.Iterator: java.lang.Object next()>();
+
+        taint = (de.visuflow.ex2.FlowAbstraction) $r0;
+
+        $r1 = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.Local getLocal()>();
+
+        $z3 = virtualinvoke $r1.<java.lang.Object: boolean equals(java.lang.Object)>(rightSide);
+
+        if $z3 == 0 goto label3;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        $r2 = new de.visuflow.ex2.IntraproceduralAnalysis$Tainted;
+
+        specialinvoke $r2.<de.visuflow.ex2.IntraproceduralAnalysis$Tainted: void <init>(de.visuflow.ex2.IntraproceduralAnalysis,java.lang.String)>(this, "assignment of tainted local");
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>($r2);
+
+        specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: void taint(soot.Value,soot.Unit,java.util.Set)>(leftSide, d, out);
+
+     label3:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 != 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        $z5 = interfaceinvoke iterator.<java.util.Iterator: boolean hasNext()>();
+
+        if $z5 != 0 goto label2;
+
+     label4:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z4 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z5 != 0", boolRef);
+
+        return;
+    }
+
+    private void checkTaintOverwrite(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        soot.jimple.internal.AbstractDefinitionStmt def;
+        soot.Value leftSide, rightSide;
+        soot.Local untainted;
+        de.visuflow.ex2.FlowAbstraction taint;
+        boolean $z0, $z1, $z2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkTaintOverwrite(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.internal.AbstractDefinitionStmt;
+
+        if $z0 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        def = (soot.jimple.internal.AbstractDefinitionStmt) d;
+
+        leftSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getLeftOp()>();
+
+        rightSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getRightOp()>();
+
+        $z1 = leftSide instanceof soot.Local;
+
+        if $z1 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $z2 = rightSide instanceof soot.jimple.Constant;
+
+        if $z2 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        interfaceinvoke d.<soot.Unit: void removeTag(java.lang.String)>("Tainted");
+
+        untainted = (soot.Local) leftSide;
+
+        taint = specialinvoke this.<de.visuflow.ex2.IntraproceduralAnalysis: de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object,java.util.Set)>(untainted, in);
+
+        if taint == null goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        interfaceinvoke in.<java.util.Set: boolean remove(java.lang.Object)>(taint);
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("taint == null", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        return;
+    }
+
+    private void checkGetSecret(java.util.Set, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in, out;
+        soot.Unit d;
+        soot.jimple.internal.AbstractDefinitionStmt def;
+        soot.Value rightSide, leftSide;
+        soot.jimple.InvokeExpr call;
+        java.lang.String methodName;
+        boolean $z0, $z1, $z2, $z3;
+        soot.SootMethod $r0;
+        de.visuflow.ex2.FlowAbstraction $r1;
+        soot.Local $r2;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in := @parameter0: java.util.Set;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void checkGetSecret(java.util.Set,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = d instanceof soot.jimple.internal.AbstractDefinitionStmt;
+
+        if $z0 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        def = (soot.jimple.internal.AbstractDefinitionStmt) d;
+
+        rightSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getRightOp()>();
+
+        leftSide = virtualinvoke def.<soot.jimple.internal.AbstractDefinitionStmt: soot.Value getLeftOp()>();
+
+        $z1 = leftSide instanceof soot.Local;
+
+        if $z1 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        $z2 = rightSide instanceof soot.jimple.InvokeExpr;
+
+        if $z2 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        call = (soot.jimple.InvokeExpr) rightSide;
+
+        $r0 = interfaceinvoke call.<soot.jimple.InvokeExpr: soot.SootMethod getMethod()>();
+
+        methodName = virtualinvoke $r0.<soot.SootMethod: java.lang.String getName()>();
+
+        $z3 = virtualinvoke methodName.<java.lang.String: boolean contains(java.lang.CharSequence)>("getSecret");
+
+        if $z3 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        $r1 = new de.visuflow.ex2.FlowAbstraction;
+
+        $r2 = (soot.Local) leftSide;
+
+        specialinvoke $r1.<de.visuflow.ex2.FlowAbstraction: void <init>(soot.Unit,soot.Local)>(d, $r2);
+
+        interfaceinvoke out.<java.util.Set: boolean add(java.lang.Object)>($r1);
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z2 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z3 == 0", boolRef);
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z1 == 0", boolRef);
+
+        return;
+    }
+
+    private void taint(soot.Value, soot.Unit, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        soot.Value v;
+        soot.Unit d;
+        java.util.Set out;
+        soot.jimple.FieldRef ref;
+        boolean $z0;
+        soot.SootField $r0, $r4, $r10;
+        soot.SootClass $r1;
+        de.visuflow.ex2.IntraproceduralAnalysis$Tainted $r2;
+        java.lang.StringBuilder $r3, $r6, $r7;
+        java.lang.String $r5, $r8;
+        de.visuflow.ex2.FlowAbstraction $r9, $r11;
+        soot.Local $r12;
+        java.util.HashMap mapLocal;
+        AnalysisInfo analysisInfoLocal;
+        AnalysisInfoTag analysisTagLocal;
+        java.lang.Boolean boolRef;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        v := @parameter0: soot.Value;
+
+        d := @parameter1: soot.Unit;
+
+        out := @parameter2: java.util.Set;
+
+        mapLocal = new java.util.HashMap;
+
+        specialinvoke mapLocal.<java.util.HashMap: void <init>()>();
+
+        analysisInfoLocal = new AnalysisInfo;
+
+        specialinvoke analysisInfoLocal.<AnalysisInfo: void <init>()>();
+
+        analysisTagLocal = new AnalysisInfoTag;
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setClassName(java.lang.String)>("de.visuflow.ex2.IntraproceduralAnalysis");
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setCondition(java.util.HashMap)>(mapLocal);
+
+        virtualinvoke analysisInfoLocal.<AnalysisInfo: void setMethodName(java.lang.String)>("<de.visuflow.ex2.IntraproceduralAnalysis: void taint(soot.Value,soot.Unit,java.util.Set)>");
+
+        specialinvoke analysisTagLocal.<AnalysisInfoTag: void <init>(AnalysisInfo)>(analysisInfoLocal);
+
+        interfaceinvoke d.<soot.Unit: void addTag(soot.tagkit.Tag)>(analysisTagLocal);
+
+        $z0 = v instanceof soot.Local;
+
+        if $z0 == 0 goto label1;
+
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(false);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        $r11 = new de.visuflow.ex2.FlowAbstraction;
+
+        $r12 = (soot.Local) v;
+
+        specialinvoke $r11.<de.visuflow.ex2.FlowAbstraction: void <init>(soot.Unit,soot.Local)>(d, $r12);
+
+        interfaceinvoke out.<java.util.Set: boolean add(java.lang.Object)>($r11);
+
+        goto label2;
+
+     label1:
+        boolRef = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(true);
+
+        virtualinvoke mapLocal.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>("$z0 == 0", boolRef);
+
+        ref = (soot.jimple.FieldRef) v;
+
+        $r0 = interfaceinvoke ref.<soot.jimple.FieldRef: soot.SootField getField()>();
+
+        $r1 = virtualinvoke $r0.<soot.SootField: soot.SootClass getDeclaringClass()>();
+
+        $r2 = new de.visuflow.ex2.IntraproceduralAnalysis$Tainted;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("class contains tainted field [");
+
+        $r4 = interfaceinvoke ref.<soot.jimple.FieldRef: soot.SootField getField()>();
+
+        $r5 = virtualinvoke $r4.<soot.SootField: java.lang.String getName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<de.visuflow.ex2.IntraproceduralAnalysis$Tainted: void <init>(de.visuflow.ex2.IntraproceduralAnalysis,java.lang.String)>(this, $r8);
+
+        virtualinvoke $r1.<soot.SootClass: void addTag(soot.tagkit.Tag)>($r2);
+
+        $r9 = new de.visuflow.ex2.FlowAbstraction;
+
+        $r10 = interfaceinvoke ref.<soot.jimple.FieldRef: soot.SootField getField()>();
+
+        specialinvoke $r9.<de.visuflow.ex2.FlowAbstraction: void <init>(soot.Unit,soot.SootField)>(d, $r10);
+
+        interfaceinvoke out.<java.util.Set: boolean add(java.lang.Object)>($r9);
+
+     label2:
+        return;
+    }
+
+    private de.visuflow.ex2.FlowAbstraction isInTaintedSet(java.lang.Object, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.lang.Object o, $r0;
+        java.util.Set taintedSet;
+        java.util.Iterator iterator;
+        de.visuflow.ex2.FlowAbstraction taint;
+        soot.SootField f, $r2, $r3;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        soot.jimple.FieldRef $r1;
+        soot.Local $r4, $r5;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        o := @parameter0: java.lang.Object;
+
+        taintedSet := @parameter1: java.util.Set;
+
+        iterator = interfaceinvoke taintedSet.<java.util.Set: java.util.Iterator iterator()>();
+
+        goto label3;
+
+     label1:
+        $r0 = interfaceinvoke iterator.<java.util.Iterator: java.lang.Object next()>();
+
+        taint = (de.visuflow.ex2.FlowAbstraction) $r0;
+
+        $z0 = o instanceof soot.Local;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.Local getLocal()>();
+
+        if $r4 == null goto label3;
+
+        $r5 = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.Local getLocal()>();
+
+        $z3 = virtualinvoke $r5.<java.lang.Object: boolean equals(java.lang.Object)>(o);
+
+        if $z3 == 0 goto label3;
+
+        return taint;
+
+     label2:
+        $z1 = o instanceof soot.jimple.FieldRef;
+
+        if $z1 == 0 goto label3;
+
+        $r1 = (soot.jimple.FieldRef) o;
+
+        f = interfaceinvoke $r1.<soot.jimple.FieldRef: soot.SootField getField()>();
+
+        $r2 = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.SootField getField()>();
+
+        if $r2 == null goto label3;
+
+        $r3 = virtualinvoke taint.<de.visuflow.ex2.FlowAbstraction: soot.SootField getField()>();
+
+        $z2 = virtualinvoke $r3.<java.lang.Object: boolean equals(java.lang.Object)>(f);
+
+        if $z2 == 0 goto label3;
+
+        return taint;
+
+     label3:
+        $z4 = interfaceinvoke iterator.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 != 0 goto label1;
+
+        return null;
+    }
+
+    protected java.util.Set newInitialFlow()
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.HashSet $r0;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        $r0 = new java.util.HashSet;
+
+        specialinvoke $r0.<java.util.HashSet: void <init>()>();
+
+        return $r0;
+    }
+
+    protected java.util.Set entryInitialFlow()
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.HashSet $r0;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        $r0 = new java.util.HashSet;
+
+        specialinvoke $r0.<java.util.HashSet: void <init>()>();
+
+        return $r0;
+    }
+
+    protected void merge(java.util.Set, java.util.Set, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set in1, in2, out;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        in1 := @parameter0: java.util.Set;
+
+        in2 := @parameter1: java.util.Set;
+
+        out := @parameter2: java.util.Set;
+
+        interfaceinvoke out.<java.util.Set: boolean addAll(java.util.Collection)>(in1);
+
+        interfaceinvoke out.<java.util.Set: boolean addAll(java.util.Collection)>(in2);
+
+        return;
+    }
+
+    protected void copy(java.util.Set, java.util.Set)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Set source, dest;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        source := @parameter0: java.util.Set;
+
+        dest := @parameter1: java.util.Set;
+
+        interfaceinvoke dest.<java.util.Set: void clear()>();
+
+        interfaceinvoke dest.<java.util.Set: boolean addAll(java.util.Collection)>(source);
+
+        return;
+    }
+
+    public void doAnalyis(java.util.Map)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis this;
+        java.util.Map cache;
+        java.util.List result;
+        soot.SootMethod $r0;
+        java.lang.String $r1;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        cache := @parameter0: java.util.Map;
+
+        result = specialinvoke this.<soot.toolkits.scalar.ForwardFlowAnalysis: java.util.List doCachedAnalysis()>();
+
+        $r0 = this.<de.visuflow.ex2.IntraproceduralAnalysis: soot.SootMethod method>;
+
+        $r1 = virtualinvoke $r0.<soot.SootMethod: java.lang.String getSignature()>();
+
+        interfaceinvoke cache.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r1, result);
+
+        return;
+    }
+
+    protected volatile java.lang.Object entryInitialFlow()
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis l0;
+        java.util.Set $r0;
+
+        l0 := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        $r0 = virtualinvoke l0.<de.visuflow.ex2.IntraproceduralAnalysis: java.util.Set entryInitialFlow()>();
+
+        return $r0;
+    }
+
+    protected volatile void copy(java.lang.Object, java.lang.Object)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis l0;
+        java.lang.Object l1, l2;
+        java.util.Set $r0, $r1;
+
+        l0 := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        l1 := @parameter0: java.lang.Object;
+
+        l2 := @parameter1: java.lang.Object;
+
+        $r1 = (java.util.Set) l1;
+
+        $r0 = (java.util.Set) l2;
+
+        virtualinvoke l0.<de.visuflow.ex2.IntraproceduralAnalysis: void copy(java.util.Set,java.util.Set)>($r1, $r0);
+
+        return;
+    }
+
+    protected volatile java.lang.Object newInitialFlow()
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis l0;
+        java.util.Set $r0;
+
+        l0 := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        $r0 = virtualinvoke l0.<de.visuflow.ex2.IntraproceduralAnalysis: java.util.Set newInitialFlow()>();
+
+        return $r0;
+    }
+
+    protected volatile void flowThrough(java.lang.Object, java.lang.Object, java.lang.Object)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis l0;
+        java.lang.Object l1, l2, l3;
+        java.util.Set $r0, $r2;
+        soot.Unit $r1;
+
+        l0 := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        l1 := @parameter0: java.lang.Object;
+
+        l2 := @parameter1: java.lang.Object;
+
+        l3 := @parameter2: java.lang.Object;
+
+        $r2 = (java.util.Set) l1;
+
+        $r1 = (soot.Unit) l2;
+
+        $r0 = (java.util.Set) l3;
+
+        virtualinvoke l0.<de.visuflow.ex2.IntraproceduralAnalysis: void flowThrough(java.util.Set,soot.Unit,java.util.Set)>($r2, $r1, $r0);
+
+        return;
+    }
+
+    protected volatile void merge(java.lang.Object, java.lang.Object, java.lang.Object)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis l0;
+        java.lang.Object l1, l2, l3;
+        java.util.Set $r0, $r1, $r2;
+
+        l0 := @this: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        l1 := @parameter0: java.lang.Object;
+
+        l2 := @parameter1: java.lang.Object;
+
+        l3 := @parameter2: java.lang.Object;
+
+        $r2 = (java.util.Set) l1;
+
+        $r1 = (java.util.Set) l2;
+
+        $r0 = (java.util.Set) l3;
+
+        virtualinvoke l0.<de.visuflow.ex2.IntraproceduralAnalysis: void merge(java.util.Set,java.util.Set,java.util.Set)>($r2, $r1, $r0);
+
+        return;
+    }
+}

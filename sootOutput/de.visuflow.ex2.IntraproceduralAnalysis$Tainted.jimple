@@ -1,0 +1,58 @@
+public class de.visuflow.ex2.IntraproceduralAnalysis$Tainted extends java.lang.Object implements soot.tagkit.Tag
+{
+    public static final java.lang.String NAME;
+    private java.lang.String cause;
+    final de.visuflow.ex2.IntraproceduralAnalysis this$0;
+
+    public void <init>(de.visuflow.ex2.IntraproceduralAnalysis, java.lang.String)
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis$Tainted this;
+        de.visuflow.ex2.IntraproceduralAnalysis l1;
+        java.lang.String cause;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis$Tainted;
+
+        l1 := @parameter0: de.visuflow.ex2.IntraproceduralAnalysis;
+
+        cause := @parameter1: java.lang.String;
+
+        this.<de.visuflow.ex2.IntraproceduralAnalysis$Tainted: de.visuflow.ex2.IntraproceduralAnalysis this$0> = l1;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        this.<de.visuflow.ex2.IntraproceduralAnalysis$Tainted: java.lang.String cause> = cause;
+
+        return;
+    }
+
+    public java.lang.String getName()
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis$Tainted this;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis$Tainted;
+
+        return "Tainted";
+    }
+
+    public byte[] getValue() throws soot.tagkit.AttributeValueException
+    {
+        de.visuflow.ex2.IntraproceduralAnalysis$Tainted this;
+        java.lang.String $r0;
+        byte[] $r1;
+
+        this := @this: de.visuflow.ex2.IntraproceduralAnalysis$Tainted;
+
+        $r0 = this.<de.visuflow.ex2.IntraproceduralAnalysis$Tainted: java.lang.String cause>;
+
+        $r1 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        return $r1;
+    }
+
+    public static void <clinit>()
+    {
+        <de.visuflow.ex2.IntraproceduralAnalysis$Tainted: java.lang.String NAME> = "Tainted";
+
+        return;
+    }
+}

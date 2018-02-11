@@ -1,0 +1,339 @@
+public class de.visuflow.ex2.updated.FlowAbstractionUpdated extends java.lang.Object
+{
+    private final soot.Unit source;
+    private final soot.Local local;
+    private final soot.SootField field;
+
+    public void <init>(soot.Unit, soot.Local)
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Unit source;
+        soot.Local local;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        source := @parameter0: soot.Unit;
+
+        local := @parameter1: soot.Local;
+
+        specialinvoke this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: void <init>(soot.Unit,soot.Local,soot.SootField)>(source, local, null);
+
+        return;
+    }
+
+    public void <init>(soot.Unit, soot.SootField)
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Unit source;
+        soot.SootField field;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        source := @parameter0: soot.Unit;
+
+        field := @parameter1: soot.SootField;
+
+        specialinvoke this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: void <init>(soot.Unit,soot.Local,soot.SootField)>(source, null, field);
+
+        return;
+    }
+
+    public void <init>(soot.Unit, soot.SootClass)
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Unit source;
+        soot.SootClass clazz;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        source := @parameter0: soot.Unit;
+
+        clazz := @parameter1: soot.SootClass;
+
+        specialinvoke this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: void <init>(soot.Unit,soot.Local,soot.SootField)>(source, null, null);
+
+        return;
+    }
+
+    public void <init>(soot.Unit, soot.Local, soot.SootField)
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Unit source;
+        soot.Local local;
+        soot.SootField field;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        source := @parameter0: soot.Unit;
+
+        local := @parameter1: soot.Local;
+
+        field := @parameter2: soot.SootField;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Unit source> = source;
+
+        this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local> = local;
+
+        this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field> = field;
+
+        return;
+    }
+
+    public soot.Unit getSource()
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Unit $r0;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Unit source>;
+
+        return $r0;
+    }
+
+    public soot.Local getLocal()
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Local $r0;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        return $r0;
+    }
+
+    public soot.SootField getField()
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.SootField $r0;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        return $r0;
+    }
+
+    public soot.SootClass getBaseClass()
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.SootField $r0, $r2;
+        java.lang.RuntimeException $r1;
+        soot.SootClass $r3;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        if $r0 == null goto label1;
+
+        $r2 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        $r3 = virtualinvoke $r2.<soot.SootField: soot.SootClass getDeclaringClass()>();
+
+        return $r3;
+
+     label1:
+        $r1 = new java.lang.RuntimeException;
+
+        specialinvoke $r1.<java.lang.RuntimeException: void <init>(java.lang.String)>("Field is not set");
+
+        throw $r1;
+    }
+
+    public int hashCode()
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Local $r0, $r1;
+        int $i0, $i1, $i2, result#3, $i3;
+        soot.SootField $r2, $r3;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $i0 = 31 * 1;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        if $r0 != null goto label1;
+
+        $i2 = 0;
+
+        goto label2;
+
+     label1:
+        $r1 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        $i2 = virtualinvoke $r1.<java.lang.Object: int hashCode()>();
+
+     label2:
+        result#3 = $i0 + $i2;
+
+        $i1 = 31 * result#3;
+
+        $r2 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        if $r2 != null goto label3;
+
+        $i3 = 0;
+
+        goto label4;
+
+     label3:
+        $r3 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        $i3 = virtualinvoke $r3.<java.lang.Object: int hashCode()>();
+
+     label4:
+        result#3 = $i1 + $i3;
+
+        return result#3;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this, other;
+        java.lang.Object obj;
+        boolean $z0, $z1, $z2;
+        soot.Local $r0, $r1, $r2, $r7;
+        soot.SootField $r3, $r4, $r5, $r6;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        obj := @parameter0: java.lang.Object;
+
+        if this != obj goto label1;
+
+        return 1;
+
+     label1:
+        if obj == null goto label2;
+
+        $z0 = obj instanceof de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        if $z0 != 0 goto label3;
+
+     label2:
+        return 0;
+
+     label3:
+        other = (de.visuflow.ex2.updated.FlowAbstractionUpdated) obj;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        if $r0 != null goto label4;
+
+        $r7 = other.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        if $r7 == null goto label5;
+
+        return 0;
+
+     label4:
+        $r2 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        $r1 = other.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        $z1 = virtualinvoke $r2.<java.lang.Object: boolean equals(java.lang.Object)>($r1);
+
+        if $z1 != 0 goto label5;
+
+        return 0;
+
+     label5:
+        $r3 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        if $r3 != null goto label6;
+
+        $r6 = other.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        if $r6 == null goto label7;
+
+        return 0;
+
+     label6:
+        $r5 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        $r4 = other.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        $z2 = virtualinvoke $r5.<java.lang.Object: boolean equals(java.lang.Object)>($r4);
+
+        if $z2 != 0 goto label7;
+
+        return 0;
+
+     label7:
+        return 1;
+    }
+
+    public java.lang.String toString()
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this;
+        soot.Local $r0, $r7;
+        soot.SootField $r1, $r3;
+        java.lang.StringBuilder $r2, $r4, $r6, $r8;
+        java.lang.String $r5, $r9;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $r0 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        if $r0 == null goto label1;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>("LOCAL ");
+
+        $r7 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r9;
+
+     label1:
+        $r1 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        if $r1 == null goto label2;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("FIELD ");
+
+        $r3 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+
+     label2:
+        return "";
+    }
+
+    public de.visuflow.ex2.updated.FlowAbstractionUpdated deriveWithNewSource(soot.Unit)
+    {
+        de.visuflow.ex2.updated.FlowAbstractionUpdated this, $r0;
+        soot.Unit newSource;
+        soot.SootField $r1;
+        soot.Local $r2;
+
+        this := @this: de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        newSource := @parameter0: soot.Unit;
+
+        $r0 = new de.visuflow.ex2.updated.FlowAbstractionUpdated;
+
+        $r2 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.Local local>;
+
+        $r1 = this.<de.visuflow.ex2.updated.FlowAbstractionUpdated: soot.SootField field>;
+
+        specialinvoke $r0.<de.visuflow.ex2.updated.FlowAbstractionUpdated: void <init>(soot.Unit,soot.Local,soot.SootField)>(newSource, $r2, $r1);
+
+        return $r0;
+    }
+}

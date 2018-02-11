@@ -1,0 +1,126 @@
+class de.visuflow.ex2.MainClass$2 extends soot.SceneTransformer
+{
+
+    void <init>()
+    {
+        de.visuflow.ex2.MainClass$2 this;
+
+        this := @this: de.visuflow.ex2.MainClass$2;
+
+        specialinvoke this.<soot.SceneTransformer: void <init>()>();
+
+        return;
+    }
+
+    protected void internalTransform(java.lang.String, java.util.Map)
+    {
+        de.visuflow.ex2.MainClass$2 this;
+        java.lang.String phase;
+        java.util.Map arg1;
+        soot.util.Chain classes;
+        soot.SootClass sootClass;
+        java.util.Iterator l5, l7, l10;
+        soot.SootMethod sootMethod;
+        soot.Body body;
+        soot.Unit unit;
+        soot.Scene $r0;
+        java.lang.Object $r1, $r3, $r5;
+        boolean $z0, $z1, $z2, $z3;
+        java.util.List $r2;
+        soot.PatchingChain $r4;
+
+        this := @this: de.visuflow.ex2.MainClass$2;
+
+        phase := @parameter0: java.lang.String;
+
+        arg1 := @parameter1: java.util.Map;
+
+        $r0 = staticinvoke <soot.Scene: soot.Scene v()>();
+
+        classes = virtualinvoke $r0.<soot.Scene: soot.util.Chain getClasses()>();
+
+        l5 = interfaceinvoke classes.<soot.util.Chain: java.util.Iterator iterator()>();
+
+        goto label7;
+
+     label1:
+        $r1 = interfaceinvoke l5.<java.util.Iterator: java.lang.Object next()>();
+
+        sootClass = (soot.SootClass) $r1;
+
+        $z0 = virtualinvoke sootClass.<soot.SootClass: boolean isJavaLibraryClass()>();
+
+        if $z0 == 0 goto label2;
+
+        goto label7;
+
+     label2:
+        $r2 = virtualinvoke sootClass.<soot.SootClass: java.util.List getMethods()>();
+
+        l7 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+        goto label6;
+
+     label3:
+        $r3 = interfaceinvoke l7.<java.util.Iterator: java.lang.Object next()>();
+
+        sootMethod = (soot.SootMethod) $r3;
+
+        body = virtualinvoke sootMethod.<soot.SootMethod: soot.Body retrieveActiveBody()>();
+
+        $r4 = virtualinvoke body.<soot.Body: soot.PatchingChain getUnits()>();
+
+        l10 = virtualinvoke $r4.<soot.PatchingChain: java.util.Iterator iterator()>();
+
+        goto label5;
+
+     label4:
+        $r5 = interfaceinvoke l10.<java.util.Iterator: java.lang.Object next()>();
+
+        unit = (soot.Unit) $r5;
+
+        specialinvoke this.<de.visuflow.ex2.MainClass$2: void addFullyQualifiedName(soot.Unit,soot.SootClass,soot.SootMethod)>(unit, sootClass, sootMethod);
+
+     label5:
+        $z2 = interfaceinvoke l10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 != 0 goto label4;
+
+     label6:
+        $z1 = interfaceinvoke l7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 != 0 goto label3;
+
+     label7:
+        $z3 = interfaceinvoke l5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 != 0 goto label1;
+
+        return;
+    }
+
+    private void addFullyQualifiedName(soot.Unit, soot.SootClass, soot.SootMethod)
+    {
+        de.visuflow.ex2.MainClass$2 this;
+        soot.Unit unit;
+        soot.SootClass sootClass;
+        soot.SootMethod sootMethod;
+        de.visuflow.ex2.MainClass$2$1 $r0;
+
+        this := @this: de.visuflow.ex2.MainClass$2;
+
+        unit := @parameter0: soot.Unit;
+
+        sootClass := @parameter1: soot.SootClass;
+
+        sootMethod := @parameter2: soot.SootMethod;
+
+        $r0 = new de.visuflow.ex2.MainClass$2$1;
+
+        specialinvoke $r0.<de.visuflow.ex2.MainClass$2$1: void <init>(de.visuflow.ex2.MainClass$2,soot.SootClass,soot.SootMethod,soot.Unit)>(this, sootClass, sootMethod, unit);
+
+        interfaceinvoke unit.<soot.Unit: void addTag(soot.tagkit.Tag)>($r0);
+
+        return;
+    }
+}

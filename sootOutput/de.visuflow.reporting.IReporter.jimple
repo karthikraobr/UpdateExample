@@ -1,0 +1,7 @@
+public interface  de.visuflow.reporting.IReporter extends java.lang.Object
+{
+
+    public abstract void report(soot.SootMethod, soot.Unit);
+
+    public abstract void report(soot.SootMethod, soot.Unit, soot.Unit);
+}

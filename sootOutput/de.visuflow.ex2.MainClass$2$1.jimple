@@ -1,0 +1,114 @@
+class de.visuflow.ex2.MainClass$2$1 extends java.lang.Object implements soot.tagkit.Tag
+{
+    final de.visuflow.ex2.MainClass$2 this$1;
+    private final soot.SootClass val$sootClass;
+    private final soot.SootMethod val$sootMethod;
+    private final soot.Unit val$unit;
+
+    void <init>(de.visuflow.ex2.MainClass$2, soot.SootClass, soot.SootMethod, soot.Unit)
+    {
+        de.visuflow.ex2.MainClass$2$1 this;
+        de.visuflow.ex2.MainClass$2 l1;
+        soot.SootClass l2;
+        soot.SootMethod l3;
+        soot.Unit l4;
+
+        this := @this: de.visuflow.ex2.MainClass$2$1;
+
+        l1 := @parameter0: de.visuflow.ex2.MainClass$2;
+
+        l2 := @parameter1: soot.SootClass;
+
+        l3 := @parameter2: soot.SootMethod;
+
+        l4 := @parameter3: soot.Unit;
+
+        this.<de.visuflow.ex2.MainClass$2$1: de.visuflow.ex2.MainClass$2 this$1> = l1;
+
+        this.<de.visuflow.ex2.MainClass$2$1: soot.SootClass val$sootClass> = l2;
+
+        this.<de.visuflow.ex2.MainClass$2$1: soot.SootMethod val$sootMethod> = l3;
+
+        this.<de.visuflow.ex2.MainClass$2$1: soot.Unit val$unit> = l4;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public byte[] getValue() throws soot.tagkit.AttributeValueException
+    {
+        de.visuflow.ex2.MainClass$2$1 this;
+        java.lang.String fqn, $r2, $r3, $r6, $r10;
+        soot.SootClass $r1;
+        java.lang.StringBuilder $r4, $r7, $r8, $r11, $r12, tmp$165687172;
+        soot.SootMethod $r5;
+        soot.Unit $r9;
+        byte[] $r13;
+        java.io.UnsupportedEncodingException $r14;
+        soot.tagkit.AttributeValueException tmp$611890729;
+        java.lang.Throwable tmp$1460298405;
+
+        this := @this: de.visuflow.ex2.MainClass$2$1;
+
+        tmp$165687172 = new java.lang.StringBuilder;
+
+        $r1 = this.<de.visuflow.ex2.MainClass$2$1: soot.SootClass val$sootClass>;
+
+        $r2 = virtualinvoke $r1.<soot.SootClass: java.lang.String getName()>();
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke tmp$165687172.<java.lang.StringBuilder: void <init>(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke tmp$165687172.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".");
+
+        $r5 = this.<de.visuflow.ex2.MainClass$2$1: soot.SootMethod val$sootMethod>;
+
+        $r6 = virtualinvoke $r5.<soot.SootMethod: java.lang.String getName()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".\u00c2\u00a7\u00c2\u00a7");
+
+        $r9 = this.<de.visuflow.ex2.MainClass$2$1: soot.Unit val$unit>;
+
+        $r10 = virtualinvoke $r9.<java.lang.Object: java.lang.String toString()>();
+
+        $r11 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\u00c2\u00a7\u00c2\u00a7");
+
+        fqn = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r13 = virtualinvoke fqn.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+     label2:
+        return $r13;
+
+     label3:
+        $r14 := @caughtexception;
+
+        tmp$611890729 = new soot.tagkit.AttributeValueException;
+
+        specialinvoke tmp$611890729.<soot.tagkit.AttributeValueException: void <init>()>();
+
+        virtualinvoke tmp$611890729.<soot.tagkit.AttributeValueException: java.lang.Throwable initCause(java.lang.Throwable)>($r14);
+
+        tmp$1460298405 = (java.lang.Throwable) tmp$611890729;
+
+        throw tmp$1460298405;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    public java.lang.String getName()
+    {
+        de.visuflow.ex2.MainClass$2$1 this;
+
+        this := @this: de.visuflow.ex2.MainClass$2$1;
+
+        return "visuflow.unit.fqn";
+    }
+}
